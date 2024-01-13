@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\EnemyController;
+use App\Http\Controllers\HeroController;
+use App\Http\Controllers\ItemController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +22,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home/{name}', function ($name) {
-    return view('home', ['name' => $name]);
-})->where('name', '[A-Za-z]+');
+Route::group(["prefix" => "admin"], function () {
+    Route::get('/', [AdminController::class, 'index'])->name('admin');
+
+    Route::resource('heroes', HeroController::class);
+    Route::resource('items', ItemController::class);
+    Route::resource('enemies', EnemyController::class);
+
+    Route::get('bs', [App\Http\Controllers\BattleSystemController::class, 'index'])->name('admin.bs');
+    
+});
